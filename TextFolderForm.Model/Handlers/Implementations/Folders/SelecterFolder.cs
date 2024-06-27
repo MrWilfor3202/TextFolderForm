@@ -4,13 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextFolderForm.Model.Handlers.Abstract.Folders;
+using TextFolderForm.Model.Logger.Abstract;
+using TextFolderForm.Model.Logger.Implementations;
 
 namespace TextFolderForm.Model.Handlers.Implementations.Folders
 {
     public class SelecterFolder : IFoldersHandler
     {
+        private ILogger _logger; 
+
+        public SelecterFolder(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public string HandleFolders(string path)
         {
+
             if (path == "" || path == " ")
                 return "Выберите папку!";
 
@@ -33,16 +43,17 @@ namespace TextFolderForm.Model.Handlers.Implementations.Folders
                 }
                 catch(Exception e) 
                 {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    Console.WriteLine(e.Data);
+                    _logger.Log(e.Message);
+                    _logger.Log(e.StackTrace);
+
+
                     allFilesSorted = false; 
                 }
             }
             if (allFilesSorted)
                 return "Файлы отсортированы!";
             else
-                return "Не все файлы отсортированы! Смотрите в консоль!";
+                return "Не все файлы отсортированы! Смотрите в логи!";
         }
     }
 }

@@ -1,14 +1,24 @@
 ﻿using System.IO;
 using TextFolderForm.Model.Handlers.Abstract.Folders;
+using TextFolderForm.Model.Logger.Abstract;
+using TextFolderForm.Model.Logger.Implementations;
 
 namespace TextFolderForm.Model.Handlers.Implementations.Folders
 {
     public class FolderEraser : IFoldersHandler
     {
+        private ILogger _logger;
+
+        public FolderEraser(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public string HandleFolders(string path)
         {
             if (path == "")
                 return "Выберите папку";
+
 
             bool allFilesErased = true;
 
@@ -22,7 +32,7 @@ namespace TextFolderForm.Model.Handlers.Implementations.Folders
             if (allFilesErased)
                 return "Все папки очищены";
             else
-                return "Не все папки и файлы очищены. Информация в консоли!";
+                return "Не все папки и файлы очищены. Информация в логе!";
         }
 
         private void DeleteDirectory(string path, ref bool dirErased) 
@@ -37,9 +47,8 @@ namespace TextFolderForm.Model.Handlers.Implementations.Folders
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine(e.Data);
+                _logger.Log(e.Message);
+                _logger.Log(e.StackTrace);
                 dirErased = false;
             }
         }
@@ -57,9 +66,8 @@ namespace TextFolderForm.Model.Handlers.Implementations.Folders
                 catch(Exception e)
                 {
                     allFilesInDirErased = false;
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    Console.WriteLine(e.Data);
+                    _logger.Log(e.Message);
+                    _logger.Log(e.StackTrace);
                 }
             }
 

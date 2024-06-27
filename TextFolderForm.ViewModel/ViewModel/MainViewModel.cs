@@ -10,6 +10,7 @@ using TextFolderForm.Model.Handlers.Abstract.Folders;
 using TextFolderForm.Model.Handlers.Abstract.Text;
 using TextFolderForm.Model.Handlers.Implementations.Folders;
 using TextFolderForm.Model.Handlers.Implementations.Text;
+using TextFolderForm.Model.Logger.Implementations;
 
 namespace TextFolderForm.ViewModel.ViewModel
 {
@@ -124,7 +125,7 @@ namespace TextFolderForm.ViewModel.ViewModel
 
             SortFoldersByExtensionsCommand = new MainCommand(_ =>
             {
-                _folderHandler = new SelecterFolder();
+                _folderHandler = new SelecterFolder(new FileLogger());
                 OperationResult = _folderHandler.HandleFolders(SelectedFolderPath);
             });
 
@@ -132,7 +133,7 @@ namespace TextFolderForm.ViewModel.ViewModel
             {
                 if (SelectedFolderPath != "")
                 {
-                    _folderHandler = new FolderEraser();
+                    _folderHandler = new FolderEraser(new FileLogger());
                     OperationResult = _folderHandler.HandleFolders(SelectedFolderPath);
                 }
             });
